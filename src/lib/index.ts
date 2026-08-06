@@ -1,1 +1,1 @@
-// place files you want to import through the `$lib` alias in this folder.
+//Note to self: place files you want to import through the `$lib` alias in this folder and i can use this file for js $lib
