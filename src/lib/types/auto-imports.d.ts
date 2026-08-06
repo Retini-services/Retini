@@ -11,6 +11,7 @@ declare global {
   const AddCount: typeof import('../state/count.svelte').AddCount
   const C: typeof import('../utils/check').C
   const CheckJson: typeof import('../utils/check').CheckJson
+  const DashboardState: typeof import('../state/dashboard.svelte').DashboardState
   const TestUtil: typeof import('../utils/ParseJson').TestUtil
   const TypeCheckJson: typeof import('../utils/TypeCheckJson').TypeCheckJson
   const afterUpdate: typeof import('svelte').afterUpdate
@@ -31,4 +32,10 @@ declare global {
   const setContext: typeof import('svelte').setContext
   const tick: typeof import('svelte').tick
   const toast: typeof import('../utils/swal.js').toast
+}
+// for type re-export
+declare global {
+  // @ts-ignore
+  export type { DashboardState, DeletedItem } from '../state/dashboard.svelte'
+  import('../state/dashboard.svelte')
 }
