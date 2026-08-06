@@ -5,9 +5,16 @@
 		activeTab: string;
 		onTabChange: (tab: string) => void;
 		onOpenAddModal: () => void;
+		onRefreshRemembrance: () => void;
 	}
 
-	let { activeTab, onTabChange, onOpenAddModal }: Props = $props();
+	let { 
+		activeTab, 
+		onTabChange, 
+		onOpenAddModal, 
+		onRefreshRemembrance 
+	}: Props = $props();
+
 	const tabs = ["Overview", "Settings"];
 </script>
 
@@ -26,8 +33,13 @@
 			{/each}
 		</nav>
 
-		<button class="add-games-btn" onclick={onOpenAddModal}>
-			+ Add More Games
-		</button>
+		<div class="nav-actions" style="display: flex; gap: 8px; align-items: center;">
+			<Button variant="outline" size="sm" onclick={onRefreshRemembrance}>
+				Refresh Remembrance
+			</Button>
+			<Button variant="default" size="sm" onclick={onOpenAddModal}>
+				+ Add More Games
+			</Button>
+		</div>
 	</div>
 </header>

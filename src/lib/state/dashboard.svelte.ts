@@ -27,8 +27,8 @@ export class DashboardState {
             const tagsArray: string[] = Array.isArray(rawTags)
                 ? rawTags
                 : typeof rawTags === "string"
-                ? rawTags.split(",").map((t) => t.trim())
-                : [];
+                    ? rawTags.split(",").map((t) => t.trim())
+                    : [];
 
             return (
                 tagsArray.some((t) => t.toLowerCase().includes(query)) ||
@@ -58,7 +58,7 @@ export class DashboardState {
                     const urls: string[] = JSON.parse(savedUrlsRaw);
                     if (urls.length > 0) {
                         this.customUrl = urls[0];
-                        this.loadAllUrls(urls);
+                        this.loadAllUrls(urls, false);
                     }
                 } catch {
                     localStorage.removeItem("saved_json_urls");
@@ -90,10 +90,28 @@ export class DashboardState {
         if (!browser) return;
         localStorage.clear();
         sessionStorage.clear();
+        toast.warning("Panic triggered", "All session data cleared.");
         window.location.reload();
     }
 
-    async loadAllUrls(urls: string[]) {
+    refreshRemembrance() {
+        if (!browser) return;
+        const currentDuration = localStorage.getItem("remember_duration") || "1 day";
+
+        if (currentDuration === "never") {
+            toast.info("Remembrance Disabled", "Your setting is currently set to 'Never'. Change it in Settings.");
+            return;
+        }
+
+        if (this.loadedUrls.length > 0) {
+            this.saveSession(this.loadedUrls, currentDuration);
+            toast.success("Remembrance Refreshed", `Session timer reset for ${currentDuration}.`);
+        } else {
+            toast.error("No Loaded Session", "Load a game source before refreshing remembrance.");
+        }
+    }
+
+    async loadAllUrls(urls: string[], renewOnLoad = false) {
         if (!browser) return;
         this.isLoading = true;
 
@@ -130,12 +148,15 @@ export class DashboardState {
             this.rawFetchedGames = combinedGames;
             this.loadedUrls = validUrls;
             this.isValid = true;
+            toast.success("Loaded games", "fetched games successfully from url provided.")
 
             this.gamesList = combinedGames.filter((g) => !this.isGameDeleted(g, this.deletedGamesList));
 
-            const currentDuration = localStorage.getItem("remember_duration") || "1 day";
-            if (currentDuration !== "never") {
-                this.saveSession(validUrls, currentDuration);
+            if (renewOnLoad) {
+                const currentDuration = localStorage.getItem("remember_duration") || "1 day";
+                if (currentDuration !== "never") {
+                    this.saveSession(validUrls, currentDuration);
+                }
             }
         } else {
             this.isValid = false;
@@ -144,7 +165,7 @@ export class DashboardState {
 
     async loadGames(url: string) {
         if (!url.trim()) return;
-        await this.loadAllUrls([url.trim()]);
+        await this.loadAllUrls([url.trim()], true);
     }
 
     testCustom() {
@@ -177,14 +198,11 @@ export class DashboardState {
                     this.loadedUrls = [...this.loadedUrls, url];
                 }
 
-                const currentDuration = localStorage.getItem("remember_duration") || "1 day";
-                if (currentDuration !== "never") {
-                    this.saveSession(this.loadedUrls, currentDuration);
-                }
-
+                toast.success("Games Added", `Added content from ${url}`);
                 return true;
             }
         } catch {
+            toast.error("Error", "Failed to add game package.");
             return false;
         }
         return false;
@@ -203,10 +221,12 @@ export class DashboardState {
             if (browser) {
                 localStorage.setItem("permanent_deleted_games_info", JSON.stringify(updatedList));
             }
+            toast.info("Game Removed", `"${title}" has been removed from view.`);
         }
     }
 
     restoreSingleGame(gameKey: string) {
+        const target = this.deletedGamesList.find((i) => i.key === gameKey);
         const updatedList = this.deletedGamesList.filter((item) => item.key !== gameKey);
         this.deletedGamesList = updatedList;
 
@@ -215,6 +235,7 @@ export class DashboardState {
         }
 
         this.gamesList = this.rawFetchedGames.filter((g) => !this.isGameDeleted(g, updatedList));
+        toast.success("Game Restored", target ? `"${target.title}" is back on your dashboard.` : undefined);
     }
 
     restoreAllGames() {
@@ -223,6 +244,7 @@ export class DashboardState {
             localStorage.removeItem("permanent_deleted_games_info");
         }
         this.gamesList = [...this.rawFetchedGames];
+        toast.success("All Games Restored", "All hidden games are back on your dashboard.");
     }
 
     saveSession(urls: string[], duration: string) {

@@ -2,6 +2,10 @@
 // We suggest you to commit this file into source control
 declare global {
     const AddGamesModal: typeof import("./../components/AddGamesModal.svelte")["default"]
+    const Button: typeof import("./../components/ui/Button.svelte")["default"]
+    const CustomToast: typeof import("./../components/ui/CustomToast.svelte")["default"]
+    const DevTools: typeof import("./../components/DevTools.svelte")["default"]
+    const FileTreeNode: typeof import("./../components/FileTreeNode.svelte")["default"]
     const GameCard: typeof import("./../components/GameCard.svelte")["default"]
     const GameViewer: typeof import("./../components/GameViewer.svelte")["default"]
     const Navbar: typeof import("./../components/Navbar.svelte")["default"]

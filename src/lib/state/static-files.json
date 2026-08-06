@@ -1,0 +1,43 @@
+[
+  {
+    "name": "root (/)",
+    "path": "/",
+    "type": "folder",
+    "expanded": true,
+    "children": [
+      {
+        "name": "Overview Page",
+        "path": "/",
+        "type": "file"
+      },
+      {
+        "name": "data",
+        "path": "/data",
+        "type": "folder",
+        "expanded": true,
+        "children": [
+          {
+            "name": "fake.json",
+            "path": "/data/fake.json",
+            "type": "file"
+          },
+          {
+            "name": "school.json",
+            "path": "/data/school.json",
+            "type": "file"
+          },
+          {
+            "name": "test.json",
+            "path": "/data/test.json",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "robots.txt",
+        "path": "/robots.txt",
+        "type": "file"
+      }
+    ]
+  }
+]

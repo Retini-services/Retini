@@ -16,9 +16,11 @@ declare global {
   const TypeCheckJson: typeof import('../utils/TypeCheckJson').TypeCheckJson
   const afterUpdate: typeof import('svelte').afterUpdate
   const beforeUpdate: typeof import('svelte').beforeUpdate
+  const cn: typeof import('../utils/cn').cn
   const count: typeof import('../../routes/count.svelte').count
   const counter: typeof import('../state/count.svelte').counter
   const createEventDispatcher: typeof import('svelte').createEventDispatcher
+  const devTools: typeof import('../state/DevTools.svelte').devTools
   const getAllContexts: typeof import('svelte').getAllContexts
   const getContext: typeof import('svelte').getContext
   const goto: typeof import('@sveltejs/kit').goto
@@ -31,10 +33,13 @@ declare global {
   const preloadData: typeof import('@sveltejs/kit').preloadData
   const setContext: typeof import('svelte').setContext
   const tick: typeof import('svelte').tick
-  const toast: typeof import('../utils/swal.js').toast
+  const toast: typeof import('../utils/toast').toast
 }
 // for type re-export
 declare global {
+  // @ts-ignore
+  export type { FileNode } from '../state/DevTools.svelte'
+  import('../state/DevTools.svelte')
   // @ts-ignore
   export type { DashboardState, DeletedItem } from '../state/dashboard.svelte'
   import('../state/dashboard.svelte')

@@ -8,6 +8,7 @@
 	}
 
 	let { url, title, onClose }: Props = $props();
+	toast.info("Launch", `Attempting to launch ${title}`)
 </script>
 
 <div class="game-modal">

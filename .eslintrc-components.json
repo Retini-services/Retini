@@ -1,9 +1,13 @@
 {
     "globals": {
         "AddGamesModal": true,
+        "DevTools": true,
+        "FileTreeNode": true,
         "GameCard": true,
         "GameViewer": true,
         "Navbar": true,
-        "SettingsView": true
+        "SettingsView": true,
+        "Button": true,
+        "CustomToast": true
     }
 }
