@@ -1,0 +1,16 @@
+{
+	"games": [
+		{
+			"name": "Game 1",
+			"description": "This is the first game.",
+			"releaseDate": "2023-01-01",
+			"Url": "https://example.com/game1"
+		},
+		{
+			"name": "Game 2",
+			"description": "This is the second game.",
+			"releaseDate": "2023-02-01",
+			"Url": "https://example.com/game2"
+		}
+	]
+}

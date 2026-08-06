@@ -1,0 +1,9 @@
+{
+    "globals": {
+        "AddGamesModal": true,
+        "GameCard": true,
+        "GameViewer": true,
+        "Navbar": true,
+        "SettingsView": true
+    }
+}
