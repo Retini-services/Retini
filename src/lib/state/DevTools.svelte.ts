@@ -13,21 +13,25 @@ export interface FileNode {
 const initialTree = Array.isArray(staticFilesData) && staticFilesData.length > 0
 	? staticFilesData
 	: [
-			{
-				name: "root (/)",
-				path: "/",
-				type: "folder",
-				expanded: true,
-				children: [{ name: "Overview Page", path: "/", type: "file" }]
-			}
-	  ];
+		{
+			name: "root (/)",
+			path: "/",
+			type: "folder",
+			expanded: true,
+			children: [{ name: "Overview Page", path: "/", type: "file" }]
+		}
+	];
 
 class DevToolsState {
 	isOpen = $state(false);
 	activeTab = $state<"general" | "storage" | "static" | "inject">("general");
 
 	isEnvDev = PUBLIC_DEV_MODE === "true";
-	isDevMode = $state(true);
+	isDevMode = $state(
+		typeof window !== "undefined"
+			? (PUBLIC_DEV_MODE === "true" || localStorage.getItem("is_dev_mode") === "true")
+			: true
+	);
 
 	customDuration = $state("180 days");
 	localStorageItems = $state<{ key: string; value: string }[]>([]);
@@ -186,3 +190,4 @@ class DevToolsState {
 }
 
 export const devTools = new DevToolsState();
+export const isEnvDevPublic = devTools.isEnvDev;

@@ -8,6 +8,7 @@
 
 	onMount(() => {
 		state.init();
+		autoTabCloak();
 
 		const handleKeyDown = (e: KeyboardEvent) => {
 			const savedPanicKey = localStorage.getItem("panic_key") || "\\";

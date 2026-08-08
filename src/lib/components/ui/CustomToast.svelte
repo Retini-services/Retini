@@ -208,7 +208,7 @@
 		}
 	}
 
-	/* Keyframe Animations */
+	/* Animations */
 	@keyframes animateSuccessTip {
 		0% { width: 0; left: 1px; top: 10px; }
 		54% { width: 0; left: 1px; top: 10px; }

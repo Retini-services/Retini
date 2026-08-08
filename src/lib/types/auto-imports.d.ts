@@ -8,17 +8,12 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const AddCount: typeof import('../state/count.svelte').AddCount
-  const C: typeof import('../utils/check').C
   const CheckJson: typeof import('../utils/check').CheckJson
   const DashboardState: typeof import('../state/dashboard.svelte').DashboardState
-  const TestUtil: typeof import('../utils/ParseJson').TestUtil
-  const TypeCheckJson: typeof import('../utils/TypeCheckJson').TypeCheckJson
   const afterUpdate: typeof import('svelte').afterUpdate
+  const autoTabCloak: typeof import('../utils/cloak').autoTabCloak
   const beforeUpdate: typeof import('svelte').beforeUpdate
   const cn: typeof import('../utils/cn').cn
-  const count: typeof import('../../routes/count.svelte').count
-  const counter: typeof import('../state/count.svelte').counter
   const createEventDispatcher: typeof import('svelte').createEventDispatcher
   const devTools: typeof import('../state/DevTools.svelte').devTools
   const getAllContexts: typeof import('svelte').getAllContexts
@@ -27,6 +22,7 @@ declare global {
   const hasContext: typeof import('svelte').hasContext
   const invalidate: typeof import('@sveltejs/kit').invalidate
   const invalidateAll: typeof import('@sveltejs/kit').invalidateAll
+  const isEnvDevPublic: typeof import('../state/DevTools.svelte').isEnvDevPublic
   const onDestroy: typeof import('svelte').onDestroy
   const onMount: typeof import('svelte').onMount
   const preloadCode: typeof import('@sveltejs/kit').preloadCode

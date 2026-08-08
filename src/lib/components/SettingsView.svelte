@@ -1,5 +1,8 @@
 <script lang="ts">
 	import "../../styles/settings.scss";
+	import * as Dialog from "$lib/components/ui/dialog";
+	import { Input } from "$lib/components/ui/input";
+	import { Button } from "$lib/components/ui/button";
 	import { onMount } from "svelte";
 
 	interface DeletedItem {
@@ -26,10 +29,33 @@
 	let isListeningForPanicKey = $state(false);
 	let isDarkMode = $state(false);
 
+	const presets: Record<string, string> = {
+		"Clever": "https://clever.com",
+		"Google Classroom": "https://classroom.google.com",
+		"Canvas": "https://canvas.instructure.com",
+		"Google": "https://google.com"
+	};
+
+	let selectedPreset = $state("Clever");
+	let customUrlInput = $state("");
+	let isCustomDialogOpen = $state(false);
+	let currentRedirect = $state("https://clever.com");
+
 	onMount(() => {
 		rememberDuration = localStorage.getItem("remember_duration") || "1 day";
 		panicKey = localStorage.getItem("panic_key") || "\\";
 		isDarkMode = document.documentElement.classList.contains("dark");
+
+		const savedRedirect = localStorage.getItem("cloak_redirect_url") || "https://clever.com";
+		currentRedirect = savedRedirect;
+
+		const foundKey = Object.keys(presets).find(key => presets[key] === savedRedirect);
+		if (foundKey) {
+			selectedPreset = foundKey;
+		} else {
+			selectedPreset = "Custom";
+			customUrlInput = savedRedirect;
+		}
 	});
 
 	function updateDuration(event: Event) {
@@ -86,12 +112,43 @@
 			}
 		}
 	}
+
+	function handleSelectChange(event: Event) {
+		const target = event.target as HTMLSelectElement;
+		const value = target.value;
+		if (value === "Custom") {
+			isCustomDialogOpen = true;
+		} else {
+			selectedPreset = value;
+			const targetUrl = presets[value];
+			saveRedirect(targetUrl);
+		}
+	}
+
+	function saveCustomUrl() {
+		let formatted = customUrlInput.trim();
+		if (!formatted) return;
+
+		if (!formatted.startsWith("http://") && !formatted.startsWith("https://")) {
+			formatted = "https://" + formatted;
+		}
+
+		customUrlInput = formatted;
+		saveRedirect(formatted);
+		selectedPreset = "Custom";
+		isCustomDialogOpen = false;
+	}
+
+	function saveRedirect(url: string) {
+		localStorage.setItem("cloak_redirect_url", url);
+		currentRedirect = url;
+	}
 </script>
 
 <div class="settings-container">
 	<div class="settings-card">
 		<h2>Settings</h2>
-		<p class="subtitle">Manage your session preferences, appearance, and hidden games.</p>
+		<p class="subtitle">Manage your session preferences, appearance, tab cloaking, and hidden games.</p>
 
 		<div class="setting-group">
 			<label for="remember-select" class="setting-label">
@@ -107,14 +164,44 @@
 
 		<hr class="divider" />
 
+		<!-- Tab Cloak Redirect Setting -->
+		<div class="setting-group">
+			<label for="cloak-select" class="setting-label">
+				<span class="title">Cloak Redirect Target</span>
+				<span class="desc">Destination page opened in the original tab when auto-cloaking.</span>
+			</label>
+
+			<div class="cloak-select-wrapper" style="display: flex; flex-direction: column; gap: 8px;">
+				<select id="cloak-select" value={selectedPreset} onchange={handleSelectChange} class="setting-select">
+					{#each Object.keys(presets) as name}
+						<option value={name}>{name}</option>
+					{/each}
+					<option value="Custom">Custom URL...</option>
+				</select>
+
+				{#if selectedPreset === "Custom"}
+					<div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+						<Input 
+							type="text" 
+							bind:value={customUrlInput} 
+							placeholder="e.g. google.com"
+						/>
+						<Button variant="default" size="sm" onclick={saveCustomUrl}>Save</Button>
+					</div>
+				{/if}
+			</div>
+		</div>
+
+		<hr class="divider" />
+
 		<div class="setting-group">
 			<div class="setting-label">
 				<span class="title">Panic Key</span>
 				<span class="desc">Pressing this key clears all local data and resets the page.</span>
 			</div>
-			<button class="key-bind-btn" onclick={listenForPanicKey}>
+			<Button variant="secondary" onclick={listenForPanicKey}>
 				{isListeningForPanicKey ? "Press any key..." : `Key: [ ${panicKey} ]`}
-			</button>
+			</Button>
 		</div>
 
 		<hr class="divider" />
@@ -125,10 +212,9 @@
 				<span class="desc">Toggle between Light and Dark interface modes.</span>
 			</div>
 			
-			<button class="toggle-btn {isDarkMode ? 'active' : ''}" onclick={toggleTheme}>
-				<span class="toggle-thumb"></span>
-				<span class="toggle-text">{isDarkMode ? 'Dark' : 'Light'}</span>
-			</button>
+			<Button variant="outline" onclick={toggleTheme}>
+				{isDarkMode ? '🌙 Dark' : '☀️ Light'}
+			</Button>
 		</div>
 
 		<hr class="divider" />
@@ -140,9 +226,9 @@
 					<span class="desc">Refresh games you've hidden back onto your dashboard.</span>
 				</div>
 				{#if deletedGamesList.length > 0}
-					<button class="restore-all-btn" onclick={onRestoreAllGames}>
+					<Button variant="secondary" size="sm" onclick={onRestoreAllGames}>
 						Refresh All
-					</button>
+					</Button>
 				{/if}
 			</div>
 
@@ -153,9 +239,9 @@
 					{#each deletedGamesList as item}
 						<li class="deleted-item">
 							<span class="game-key-text">{item.title}</span>
-							<button class="restore-btn" onclick={() => onRestoreGame?.(item.key)}>
+							<Button variant="outline" size="sm" onclick={() => onRestoreGame?.(item.key)}>
 								Refresh
-							</button>
+							</Button>
 						</li>
 					{/each}
 				</ul>
@@ -163,3 +249,30 @@
 		</div>
 	</div>
 </div>
+
+<!-- Custom URL Modal Dialog -->
+<Dialog.Root bind:open={isCustomDialogOpen}>
+	<Dialog.Content>
+		<Dialog.Header>
+			<Dialog.Title>Custom Cloak Redirect</Dialog.Title>
+			<Dialog.Description>
+				Choose the URL you want the main tab to redirect to when cloaking.
+			</Dialog.Description>
+		</Dialog.Header>
+
+		<div class="dialog-body space-y-2 py-2">
+			<label for="custom-url-input" class="text-xs font-semibold text-slate-300">Choose URL</label>
+			<Input 
+				id="custom-url-input"
+				type="text" 
+				bind:value={customUrlInput} 
+				placeholder="e.g. google.com or https://canvas.com"
+			/>
+		</div>
+
+		<Dialog.Footer>
+			<Button variant="ghost" onclick={() => isCustomDialogOpen = false}>Cancel</Button>
+			<Button variant="default" onclick={saveCustomUrl}>Save URL</Button>
+		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
