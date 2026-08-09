@@ -1,3 +1,6 @@
 [build]
-  command = "bun run build && exit 0"
+  command = "npm run build"
   publish = "build"
+
+[functions]
+  node_bundler = "esbuild"
