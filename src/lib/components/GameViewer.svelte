@@ -1,5 +1,7 @@
 <script lang="ts">
 	import "../../styles/game-viewer.scss";
+	import { toast } from "$lib/utils/toast";
+	import { onMount } from "svelte";
 
 	interface Props {
 		url: string;
@@ -8,7 +10,10 @@
 	}
 
 	let { url, title, onClose }: Props = $props();
-	toast.info("Launch", `Attempting to launch ${title}`)
+
+	onMount(() => {
+		toast.info("Launch", `Attempting to launch ${title}`);
+	});
 </script>
 
 <div class="game-modal">

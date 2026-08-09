@@ -213,7 +213,7 @@
 			</div>
 			
 			<Button variant="outline" onclick={toggleTheme}>
-				{isDarkMode ? '🌙 Dark' : '☀️ Light'}
+				{isDarkMode ? 'Dark' : 'Light'}
 			</Button>
 		</div>
 
@@ -247,10 +247,36 @@
 				</ul>
 			{/if}
 		</div>
+
+		<hr class="divider" />
+
+		<div class="setting-group vertical-group">
+			<div class="setting-header-row" style="margin-bottom: 8px;">
+				<div class="setting-label">
+					<span class="title">Credits & Contributors</span>
+					<span class="desc">The awesome people behind this project.</span>
+				</div>
+				<a href="https://github.com/retini-services" target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem; font-weight: 600; color: #38bdf8; text-decoration: none;">
+					Retini Services Org ↗
+				</a>
+			</div>
+
+			<div style="display: flex; flex-direction: column; gap: 8px;">
+				<PersonCredit 
+					name="Allister" 
+					role="UI Designer, App Co-designer, Creator, Maintainer, backend Dev & Lead Developer" 
+					githubUrl="https://github.com/idontcodddde" 
+				/>
+				<PersonCredit 
+					name="Morgan" 
+					role="Fundraiser, App Co-designer" 
+					githubUrl="https://github.com/mor6767" 
+				/>
+			</div>
+		</div>
 	</div>
 </div>
 
-<!-- Custom URL Modal Dialog -->
 <Dialog.Root bind:open={isCustomDialogOpen}>
 	<Dialog.Content>
 		<Dialog.Header>

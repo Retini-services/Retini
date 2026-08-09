@@ -19,13 +19,6 @@
 		window.addEventListener("keydown", handleKeyDown);
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	});
-
-	function handleInputKeyDown(e: KeyboardEvent) {
-		if (e.key === "Enter") {
-			e.preventDefault();
-			state.testCustom();
-		}
-	}
 </script>
 
 <Toaster position="top-right" richColors />
@@ -46,20 +39,12 @@
 {/if}
 
 {#if !state.isValid}
-	<div class="main-center">
-		<div class="test-card">
-			<div class="field">
-				<input 
-					id="url-input"
-					type="text" 
-					bind:value={state.customUrl} 
-					onkeydown={handleInputKeyDown}
-					disabled={state.isLoading}
-					placeholder={state.isLoading ? "Loading games..." : ""}
-				/>
-			</div>
-		</div>
-	</div>
+	<FakeError 
+		onLoadJson={(url) => { 
+			state.customUrl = url; 
+			state.testCustom(); 
+		}} 
+	/>
 {:else}
 	<div class="dashboard-layout">
 		<Navbar 

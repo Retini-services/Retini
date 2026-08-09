@@ -2,10 +2,12 @@
     "globals": {
         "AddGamesModal": true,
         "DevTools": true,
+        "FakeError": true,
         "FileTreeNode": true,
         "GameCard": true,
         "GameViewer": true,
         "Navbar": true,
+        "PersonCredit": true,
         "SettingsView": true,
         "CustomToast": true,
         "Button": true,
