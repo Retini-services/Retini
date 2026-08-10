@@ -13,7 +13,7 @@
 			"title": "Slope",
 			"rating": "5",
 			"releaseDate": "8/5/2026",
-			"url": "http://localhost:5173/games/slope/index.html",
+			"url": "https://symphonious-mooncake-f003e2.netlify.app/games/slope/index.html",
 			"tags": ["slope", "ball", "og"],
 			"image": "https://slopeio.org/game/slope-gm/favicon.png"
 		}
