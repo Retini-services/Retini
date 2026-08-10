@@ -3,7 +3,6 @@ import { playwright } from '@vitest/browser-playwright';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import AutoImport from 'unplugin-auto-import/vite';
-import Components from 'unplugin-svelte-components/vite';
 
 export default defineConfig({
     plugins: [
@@ -19,13 +18,6 @@ export default defineConfig({
                 filePatterns: ['*.js', '*.ts', '*.svelte.ts']
             },
             dts: './src/lib/types/auto-imports.d.ts'
-        }),
-
-        Components({
-            dirs: ['src/lib/components', 'src/lib/components/ui'],
-            extensions: ['svelte', 'svx', 'md'],
-            directoryAsNamespace: false,
-            dts: './src/lib/types/components.d.ts'
         }),
 
         tailwindcss(),
