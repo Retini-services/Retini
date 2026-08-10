@@ -16,6 +16,14 @@
 			"url": "https://symphonious-mooncake-f003e2.netlify.app/games/slope/index.html",
 			"tags": ["slope", "ball", "og"],
 			"image": "https://slopeio.org/game/slope-gm/favicon.png"
+		},
+		{
+			"title": "Balatro",
+			"rating": "4.5",
+			"releaseDate": "8/10/2026",
+			"url": "idk",
+			"tags": ["poker", "rougelike", "deck-builder"],
+			"image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0zfUcn1ldYWb_W9SJ2pu7Ey2sPoyYnkC2ThhYdY65sQ&s"
 		}
 	]
 }
