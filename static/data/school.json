@@ -8,6 +8,14 @@
 			"url": "http://isaiahswebsite.silvanzwick.com/EagX.html",
 			"tags": ["Minecraft", "EaglerCraft"],
 			"image": "https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/Onboarding_Card-A_For-Beginners_600x600.jpg"
+		},
+		{
+			"title": "Slope",
+			"rating": "5",
+			"releaseDate": "8/5/2026",
+			"url": "http://localhost:5173/games/slope/index.html",
+			"tags": ["slope", "ball", "og"],
+			"image": "https://slopeio.org/game/slope-gm/favicon.png"
 		}
 	]
 }

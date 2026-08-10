@@ -4,9 +4,6 @@ import path from "path";
 const staticDir = path.resolve(process.cwd(), "static");
 const outputFile = path.resolve(process.cwd(), "src/lib/state/static-files.json");
 
-/**
- * Recursively scans directory and builds tree nodes
- */
 function scanDirectory(dirPath, relativePath = "") {
 	const items = fs.readdirSync(dirPath, { withFileTypes: true });
 	const children = [];

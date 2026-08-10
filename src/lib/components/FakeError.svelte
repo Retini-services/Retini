@@ -34,7 +34,7 @@
 <main class="error-container">
 	<div class="error-card">
 		<h1 class="error-code">500</h1>
-		<h2>Welp son, you've reached a real error.</h2>
+		<h2>you've reached an error.</h2>
 		<p class="error-message">
 			Property 'map' does not exist on type 'string'.
 		</p>
