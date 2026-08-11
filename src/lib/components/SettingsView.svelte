@@ -296,6 +296,11 @@
                     role="Fundraiser, App Co-designer"
                     githubUrl="https://github.com/mor6767"
                 />
+                <PersonCredit
+                    name="Isaiah"
+                    role="Frontend Game suggester"
+                    githubUrl="https://github.com/ilike2dollabills"
+                />
             </div>
         </div>
     </div>
