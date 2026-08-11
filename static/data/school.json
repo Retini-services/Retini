@@ -33,5 +33,13 @@
 			"tags": ["endless runner", "mobile", "arcade"],
 			"image": "https://subwaygame.io/wp-content/uploads/2023/11/subwaysurfers.jpg"
 		}
+		{
+			"title": "2048",
+			"rating": "5",
+			"releaseDate": "8/11/2026",
+			"url": "https://play2048.co/",
+			"tags": ["single player", "number"],
+			"image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOHzN2A0B-tHd1KYtQ4jKaim0v2URINJhcRgepKXjX5A&s=10"
+		}
 	]
 }
