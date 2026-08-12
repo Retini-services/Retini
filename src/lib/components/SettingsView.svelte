@@ -298,7 +298,7 @@
                 />
                 <PersonCredit
                     name="Isaiah"
-                    role="Frontend Game suggester"
+                    role="Frontend Game suggester, App design assister, Maintainer"
                     githubUrl="https://github.com/ilike2dollabills"
                 />
             </div>
