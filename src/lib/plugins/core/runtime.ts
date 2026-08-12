@@ -1,13 +1,28 @@
 import { pluginRegistry } from './registry';
 import { loadPlugins } from './loader';
-import type { Plugin, PluginInstance } from './types';
+import { createPluginUI } from './ui';
+import type {
+    Plugin,
+    PluginInstance
+} from './types';
 
 class PluginRuntime {
     private started = false;
 
-    private startupInstances = new Map<string, PluginInstance>();
-    private layoutInstances = new Map<string, PluginInstance>();
-    private routeInstances = new Map<string, PluginInstance>();
+    private startupInstances = new Map<
+        string,
+        PluginInstance
+    >();
+
+    private layoutInstances = new Map<
+        string,
+        PluginInstance
+    >();
+
+    private routeInstances = new Map<
+        string,
+        PluginInstance
+    >();
 
     async start() {
         if (this.started) {
@@ -27,20 +42,22 @@ class PluginRuntime {
         route: string
     ): Promise<PluginInstance | undefined> {
         try {
+            const ui = createPluginUI(plugin.components);
+
             const result = await plugin.setup({
                 route,
                 browser: true,
 
                 getPlugin: <T = Plugin>(id: string) => {
-                    return pluginRegistry.get(id) as T | undefined;
-                }
+                    return pluginRegistry.get(id) as
+                        | T
+                        | undefined;
+                },
+
+                ui
             });
 
-            if (!result) {
-                return undefined;
-            }
-
-            return result;
+            return result ?? undefined;
         } catch (error) {
             console.error(
                 `[Plugins] Failed to execute "${plugin.id}"`,
@@ -55,10 +72,16 @@ class PluginRuntime {
         const plugins = pluginRegistry.getStartupPlugins();
 
         for (const plugin of plugins) {
-            const instance = await this.setupPlugin(plugin, '');
+            const instance = await this.setupPlugin(
+                plugin,
+                ''
+            );
 
             if (instance) {
-                this.startupInstances.set(plugin.id, instance);
+                this.startupInstances.set(
+                    plugin.id,
+                    instance
+                );
             }
         }
     }
@@ -67,10 +90,16 @@ class PluginRuntime {
         const plugins = pluginRegistry.getLayoutPlugins();
 
         for (const plugin of plugins) {
-            const instance = await this.setupPlugin(plugin, '*');
+            const instance = await this.setupPlugin(
+                plugin,
+                '*'
+            );
 
             if (instance) {
-                this.layoutInstances.set(plugin.id, instance);
+                this.layoutInstances.set(
+                    plugin.id,
+                    instance
+                );
             }
         }
     }
@@ -82,13 +111,20 @@ class PluginRuntime {
 
         await this.destroyRoutePlugins();
 
-        const plugins = pluginRegistry.getRoutePlugins(pathname);
+        const plugins =
+            pluginRegistry.getRoutePlugins(pathname);
 
         for (const plugin of plugins) {
-            const instance = await this.setupPlugin(plugin, pathname);
+            const instance = await this.setupPlugin(
+                plugin,
+                pathname
+            );
 
             if (instance) {
-                this.routeInstances.set(plugin.id, instance);
+                this.routeInstances.set(
+                    plugin.id,
+                    instance
+                );
             }
         }
     }
@@ -111,16 +147,25 @@ class PluginRuntime {
     }
 
     async destroyRoutePlugins() {
-        await this.destroyInstances(this.routeInstances);
+        await this.destroyInstances(
+            this.routeInstances
+        );
     }
 
     async destroy() {
         await this.destroyRoutePlugins();
-        await this.destroyInstances(this.layoutInstances);
-        await this.destroyInstances(this.startupInstances);
+
+        await this.destroyInstances(
+            this.layoutInstances
+        );
+
+        await this.destroyInstances(
+            this.startupInstances
+        );
 
         this.started = false;
     }
 }
 
-export const pluginRuntime = new PluginRuntime();
+export const pluginRuntime =
+    new PluginRuntime();
