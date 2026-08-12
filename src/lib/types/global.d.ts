@@ -8,6 +8,6 @@ export interface GamesStructure {
 }
 
 export interface JsonStructure {
-    YoooJsonWorks: boolean;
+    YoooJsonWorks: true;
     games: GamesStructure[];
 }
