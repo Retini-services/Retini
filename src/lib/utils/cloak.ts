@@ -1,4 +1,4 @@
-import { isEnvDevPublic } from "$lib/stores/DevTools.svelte.ts";
+import { isEnvDevPublic } from "$lib/stores/DevTools.svelte";
 
 export function autoTabCloak() {
     if (isEnvDevPublic) return;
