@@ -1,6 +1,6 @@
 import { PUBLIC_DEV_MODE } from "$env/static/public";
 import { toast } from "$lib/utils/toast";
-import staticFilesData from "./static-files.json";
+import staticFilesData from "$lib/data/staticFiles.json";
 
 export interface FileNode {
 	name: string;
