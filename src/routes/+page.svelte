@@ -16,7 +16,6 @@
     const state = new DashboardState();
 
     onMount(() => {
-        state.init();
         autoTabCloak();
 
         const handleKeyDown = (e: KeyboardEvent) => {
