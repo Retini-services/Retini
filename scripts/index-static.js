@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 
 const staticDir = path.resolve(process.cwd(), "static");
-const outputFile = path.resolve(process.cwd(), "src/lib/state/static-files.json");
+const outputFile = path.resolve(process.cwd(), "src/lib/data/staticFiles.json");
 
 function scanDirectory(dirPath, relativePath = "") {
 	const items = fs.readdirSync(dirPath, { withFileTypes: true });
