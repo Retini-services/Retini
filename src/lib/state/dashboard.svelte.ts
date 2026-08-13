@@ -1,4 +1,5 @@
 import { browser } from "$app/environment";
+import { toast } from "$lib/utils/toast";
 
 export interface DeletedItem {
     key: string;
@@ -36,6 +37,12 @@ export class DashboardState {
             );
         })
     );
+
+    constructor() {
+        if (browser) {
+            this.init();
+        }
+    }
 
     init() {
         this.loadDeletedItemsFromStorage();
@@ -148,7 +155,7 @@ export class DashboardState {
             this.rawFetchedGames = combinedGames;
             this.loadedUrls = validUrls;
             this.isValid = true;
-            toast.success("Loaded games", "fetched games successfully from url provided.")
+            toast.success("Loaded games", "fetched games successfully from url provided.");
 
             this.gamesList = combinedGames.filter((g) => !this.isGameDeleted(g, this.deletedGamesList));
 
@@ -261,3 +268,5 @@ export class DashboardState {
         }
     }
 }
+
+export const dashboard = new DashboardState();
