@@ -13,7 +13,7 @@ export default defineConfig({
                     '@sveltejs/kit': ['goto', 'invalidate', 'invalidateAll', 'preloadData', 'preloadCode']
                 }
             ],
-            dirs: ['src/lib/utils', 'src/lib/state'],
+            dirs: ['src/lib/utils', 'src/lib/stores'],
             dirsScanOptions: {
                 filePatterns: ['*.js', '*.ts', '*.svelte.ts']
             },

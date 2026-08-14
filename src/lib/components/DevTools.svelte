@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { devTools } from '$lib/state/DevTools.svelte';
+    import { devTools } from '$lib/stores/DevTools.svelte';
     import FileTreeNode from './FileTreeNode.svelte';
     import { onMount } from 'svelte';
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { devTools, type FileNode } from "$lib/state/DevTools.svelte";
+	import { devTools, type FileNode } from "$lib/stores/DevTools.svelte";
 	import FileTreeNode from "./FileTreeNode.svelte";
 
 	interface Props {

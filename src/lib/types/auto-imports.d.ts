@@ -9,20 +9,21 @@
 export {}
 declare global {
   const CheckJson: typeof import('../utils/check').CheckJson
-  const DashboardState: typeof import('../state/dashboard.svelte').DashboardState
+  const DashboardState: typeof import('../stores/dashboard.svelte').DashboardState
   const afterUpdate: typeof import('svelte').afterUpdate
   const autoTabCloak: typeof import('../utils/cloak').autoTabCloak
   const beforeUpdate: typeof import('svelte').beforeUpdate
   const cn: typeof import('../utils/cn').cn
   const createEventDispatcher: typeof import('svelte').createEventDispatcher
-  const devTools: typeof import('../state/DevTools.svelte').devTools
+  const dashboard: typeof import('../stores/dashboard.svelte').dashboard
+  const devTools: typeof import('../stores/DevTools.svelte').devTools
   const getAllContexts: typeof import('svelte').getAllContexts
   const getContext: typeof import('svelte').getContext
   const goto: typeof import('@sveltejs/kit').goto
   const hasContext: typeof import('svelte').hasContext
   const invalidate: typeof import('@sveltejs/kit').invalidate
   const invalidateAll: typeof import('@sveltejs/kit').invalidateAll
-  const isEnvDevPublic: typeof import('../state/DevTools.svelte').isEnvDevPublic
+  const isEnvDevPublic: typeof import('../stores/DevTools.svelte').isEnvDevPublic
   const onDestroy: typeof import('svelte').onDestroy
   const onMount: typeof import('svelte').onMount
   const preloadCode: typeof import('@sveltejs/kit').preloadCode
@@ -34,9 +35,9 @@ declare global {
 // for type re-export
 declare global {
   // @ts-ignore
-  export type { FileNode } from '../state/DevTools.svelte'
-  import('../state/DevTools.svelte')
+  export type { FileNode } from '../stores/DevTools.svelte'
+  import('../stores/DevTools.svelte')
   // @ts-ignore
-  export type { DashboardState, DeletedItem } from '../state/dashboard.svelte'
-  import('../state/dashboard.svelte')
+  export type { DashboardState, DeletedItem } from '../stores/dashboard.svelte'
+  import('../stores/dashboard.svelte')
 }
