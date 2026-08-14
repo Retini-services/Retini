@@ -1,5 +1,5 @@
 <script lang="ts">
-	import "../../styles/navbar.scss";
+	import "../styles/navbar.scss";
 	import { Button } from "$lib/components/ui/button";
 
 	interface Props {

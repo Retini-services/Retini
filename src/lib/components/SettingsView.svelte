@@ -1,5 +1,5 @@
 <script lang="ts">
-    import '../../styles/settings.scss';
+    import '../styles/settings.scss';
     import * as Dialog from '$lib/components/ui/dialog';
     import { Input } from '$lib/components/ui/input';
     import { Button } from '$lib/components/ui/button';
