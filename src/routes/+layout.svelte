@@ -1,22 +1,19 @@
 <script lang="ts">
-    import '../styles/layout.css';
-
+    import '$lib/styles/layout.css';
     import favicon from '$lib/assets/favicon.svg';
-
     import { onMount } from 'svelte';
-
     import { afterNavigate } from '$app/navigation';
 
-    import { pluginRuntime, browserPluginManager, browserPluginRuntime } from '$lib/plugins';
+    import { browserPluginManager, browserPluginRuntime } from '$lib/plugins';
 
     let { children } = $props();
 
     onMount(async () => {
-        await pluginRuntime.start();
+        console.log('[BrowserPlugins] Initializing...');
 
-        const browserPlugins = browserPluginManager.load();
+        const plugins = browserPluginManager.load();
 
-        await browserPluginRuntime.start(browserPlugins);
+        await browserPluginRuntime.start(plugins);
 
         await browserPluginRuntime.runLayout();
 
@@ -26,11 +23,7 @@
     afterNavigate(async ({ to }) => {
         const pathname = to?.url.pathname ?? window.location.pathname;
 
-        await pluginRuntime.runRoute(pathname);
-
         await browserPluginRuntime.runRoute(pathname);
-
-        await browserPluginRuntime.runLayout();
     });
 </script>
 

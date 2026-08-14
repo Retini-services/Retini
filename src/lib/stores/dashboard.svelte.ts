@@ -18,6 +18,7 @@ export class DashboardState {
     activeTab = $state("Overview");
     selectedGame = $state<{ title: string; url: string } | null>(null);
     isAddModalOpen = $state(false);
+    plugins = $state<Array<any>>([]);
 
     filteredGames = $derived(
         this.gamesList.filter((game) => {
@@ -46,6 +47,8 @@ export class DashboardState {
 
     init() {
         this.loadDeletedItemsFromStorage();
+        this.loadPluginsFromStorage();
+        this.executeActivePlugins();
 
         const savedDuration = localStorage.getItem("remember_duration");
         if (savedDuration && savedDuration !== "never") {
@@ -86,6 +89,171 @@ export class DashboardState {
         } catch {
             this.deletedGamesList = [];
         }
+    }
+
+    async addPlugin(manifestUrl: string) {
+        if (!browser || !manifestUrl.trim()) return;
+
+        try {
+            const res = await fetch(manifestUrl.trim());
+            if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+
+            const manifest = await res.json();
+
+            if (!manifest.id || !manifest.name) {
+                toast.error("Invalid Manifest", "The plugin manifest is missing required fields.");
+                return;
+            }
+
+            if (this.plugins.some((p) => (p.manifest?.id || p.id) === manifest.id)) {
+                toast.error("Already Installed", "This plugin is already registered.");
+                return;
+            }
+
+            const newPlugin = {
+                id: manifest.id,
+                manifestUrl: manifestUrl.trim(),
+                enabled: true,
+                manifest
+            };
+            const updatedPlugins = [...this.plugins, newPlugin];
+            this.plugins = updatedPlugins;
+
+            localStorage.setItem("registered_plugins", JSON.stringify(updatedPlugins));
+            this.executeActivePlugins();
+
+            toast.success("Plugin Added", `Successfully registered "${manifest.name}".`);
+        } catch (err) {
+            console.error("Failed to add plugin:", err);
+            toast.error("Error", "Failed to fetch or parse plugin manifest URL.");
+        }
+    }
+
+    togglePlugin(id: string) {
+        if (!browser) return;
+        this.plugins = this.plugins.map((p) => {
+            if ((p.manifest?.id || p.id) === id) {
+                return { ...p, enabled: !p.enabled };
+            }
+            return p;
+        });
+        localStorage.setItem("registered_plugins", JSON.stringify(this.plugins));
+        this.executeActivePlugins();
+        toast.success("Plugin Updated", "Plugin toggle state saved.");
+    }
+
+    removePlugin(id: string) {
+        if (!browser) return;
+        const target = this.plugins.find((p) => (p.manifest?.id || p.id) === id);
+        this.plugins = this.plugins.filter((p) => (p.manifest?.id || p.id) !== id);
+        localStorage.setItem("registered_plugins", JSON.stringify(this.plugins));
+
+        const scriptEl = document.getElementById(`plugin-script-${id}`);
+        if (scriptEl) scriptEl.remove();
+
+        toast.info("Plugin Removed", target ? `Uninstalled "${target.manifest?.name || target.name}".` : "Plugin removed.");
+    }
+
+    async refreshPlugin(id: string) {
+        if (!browser) return;
+        const target = this.plugins.find((p) => (p.manifest?.id || p.id) === id);
+        if (!target || !target.manifestUrl) {
+            toast.error("Error", "Plugin manifest URL not found for refresh.");
+            return;
+        }
+
+        try {
+            const res = await fetch(target.manifestUrl);
+            if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+
+            const manifest = await res.json();
+            if (!manifest.id || !manifest.name) {
+                toast.error("Invalid Manifest", "The updated plugin manifest is missing required fields.");
+                return;
+            }
+
+            this.plugins = this.plugins.map((p) => {
+                if ((p.manifest?.id || p.id) === id) {
+                    return { ...p, manifest };
+                }
+                return p;
+            });
+
+            localStorage.setItem("registered_plugins", JSON.stringify(this.plugins));
+            this.executeActivePlugins();
+            toast.success("Plugin Refreshed", `Successfully updated "${manifest.name}".`);
+        } catch (err) {
+            console.error("Failed to refresh plugin:", err);
+            toast.error("Error", "Failed to fetch updated plugin manifest.");
+        }
+    }
+
+    executeActivePlugins() {
+        if (!browser) return;
+
+        this.plugins.forEach((p) => {
+            const pluginId = p.manifest?.id || p.id;
+            const scriptUrl = p.manifest?.main || p.manifest?.script;
+            const existingScript = document.getElementById(`plugin-script-${pluginId}`);
+
+            if (!p.enabled) {
+                if (existingScript) existingScript.remove();
+                return;
+            }
+
+            if (scriptUrl && !existingScript) {
+                try {
+                    let resolvedUrl = scriptUrl;
+                    if (!scriptUrl.startsWith('http') && p.manifestUrl) {
+                        const base = new URL(p.manifestUrl);
+                        resolvedUrl = new URL(scriptUrl, base.origin + base.pathname.substring(0, base.pathname.lastIndexOf('/') + 1)).href;
+                    }
+
+                    const script = document.createElement('script');
+                    script.id = `plugin-script-${pluginId}`;
+                    script.src = resolvedUrl;
+                    script.async = true;
+                    document.head.appendChild(script);
+                } catch (e) {
+                    console.error(`Failed to load script for plugin ${pluginId}:`, e);
+                }
+            }
+        });
+    }
+
+    loadPluginsFromStorage() {
+        if (!browser) return;
+        try {
+            const raw = localStorage.getItem("registered_plugins");
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                this.plugins = parsed.map((p: any) => {
+                    if (!p.manifest) {
+                        return {
+                            id: p.id,
+                            manifestUrl: p.manifestUrl,
+                            enabled: p.enabled ?? true,
+                            manifest: p
+                        };
+                    }
+                    return p;
+                });
+            }
+        } catch {
+            this.plugins = [];
+        }
+    }
+
+    exportPluginsJson() {
+        if (!browser) return;
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(this.plugins, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", "plugins_backup.json");
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        toast.success("Exported", "Plugins configuration downloaded.");
     }
 
     isGameDeleted(game: any, deletedItems: DeletedItem[]): boolean {

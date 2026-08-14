@@ -1,8 +1,9 @@
 <script lang="ts">
-    import '../styles/global.scss';
-    import '../styles/main.scss';
+    import '$lib/styles/global.scss';
+    import '$lib/styles/main.scss';
     import { onMount } from 'svelte';
     import { Toaster } from 'svelte-sonner';
+    import { dashboard as state } from '$lib/stores/dashboard.svelte';
     import {
         GameViewer,
         AddGamesModal,
@@ -12,8 +13,6 @@
         SettingsView,
         DevTools,
     } from '$lib/components';
-
-    const state = new DashboardState();
 
     onMount(() => {
         autoTabCloak();
@@ -94,12 +93,7 @@
                 {/if}
             </main>
         {:else if state.activeTab === 'Settings'}
-            <SettingsView
-                currentUrl={state.customUrl}
-                deletedGamesList={state.deletedGamesList}
-                onRestoreGame={(key) => state.restoreSingleGame(key)}
-                onRestoreAllGames={() => state.restoreAllGames()}
-            />
+            <SettingsView/>
         {/if}
     </div>
 {/if}
