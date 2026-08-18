@@ -93,7 +93,12 @@
                 {/if}
             </main>
         {:else if state.activeTab === 'Settings'}
-            <SettingsView/>
+            <SettingsView
+                currentUrl={state.customUrl}
+                deletedGamesList={state.deletedGamesList}
+                onRestoreGame={(key) => state.restoreSingleGame(key)}
+                onRestoreAllGames={() => state.restoreAllGames()}
+            />
         {/if}
     </div>
 {/if}
