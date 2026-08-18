@@ -1,4 +1,4 @@
-import { JsonStructureSchema } from "$lib/schemas/games";
+import { JsonStructureSchema } from "$lib/schemas";
 
 export async function CheckJson(jsonUrl: string): Promise<boolean> {
     try {
